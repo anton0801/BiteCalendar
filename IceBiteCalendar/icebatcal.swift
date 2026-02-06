@@ -1,7 +1,6 @@
 
 import SwiftUI
 
-// MARK: - Main App
 @main
 struct IceBiteCalendarApp: App {
     @StateObject private var dataManager = DataManager()

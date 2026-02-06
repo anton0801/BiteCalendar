@@ -13,81 +13,82 @@ struct CalendarView: View {
             ZStack {
                 Color.iceDarkBlue.ignoresSafeArea()
                 
-                VStack(spacing: 0) {
-                    // Custom header with month/year
-                    HStack {
-                        Button(action: { changeMonth(by: -1) }) {
-                            Image(systemName: "chevron.left.circle.fill")
-                                .foregroundColor(.iceAccent)
-                                .font(.system(size: 32))
-                        }
-                        
-                        Spacer()
-                        
-                        Text(monthYearString)
-                            .font(.system(size: 28, weight: .bold))
-                            .foregroundColor(.white)
-                        
-                        Spacer()
-                        
-                        Button(action: { changeMonth(by: 1) }) {
-                            Image(systemName: "chevron.right.circle.fill")
-                                .foregroundColor(.iceAccent)
-                                .font(.system(size: 32))
-                        }
-                    }
-                    .padding(.horizontal, 24)
-                    .padding(.top, 8)
-                    .padding(.bottom, 20)
-                    
-                    // Weekday headers
-                    HStack(spacing: 0) {
-                        ForEach(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], id: \.self) { day in
-                            Text(day)
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(.iceTextSecondary)
-                                .frame(maxWidth: .infinity)
-                        }
-                    }
-                    .padding(.horizontal, 24)
-                    .padding(.bottom, 16)
-                    
-                    // Calendar grid
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 16) {
-                        ForEach(daysInMonth, id: \.self) { date in
-                            if let date = date {
-                                DayCell(date: date, isSelected: isSelected(date), trips: dataManager.tripsForDate(date))
-                                    .onTapGesture {
-                                        withAnimation(.spring(response: 0.3)) {
-                                            selectedDate = date
-                                        }
-                                    }
-                            } else {
-                                Color.clear
-                                    .frame(height: 60)
+                ScrollView {
+                    VStack(spacing: 0) {
+                        HStack {
+                            Button(action: { changeMonth(by: -1) }) {
+                                Image(systemName: "chevron.left.circle.fill")
+                                    .foregroundColor(.iceAccent)
+                                    .font(.system(size: 32))
+                            }
+                            
+                            Spacer()
+                            
+                            Text(monthYearString)
+                                .font(.system(size: 28, weight: .bold))
+                                .foregroundColor(.white)
+                            
+                            Spacer()
+                            
+                            Button(action: { changeMonth(by: 1) }) {
+                                Image(systemName: "chevron.right.circle.fill")
+                                    .foregroundColor(.iceAccent)
+                                    .font(.system(size: 32))
                             }
                         }
-                    }
-                    .padding(.horizontal, 24)
-                    
-                    Spacer()
-                    
-                    // Add trip button
-                    Button(action: { showingAddTrip = true }) {
-                        HStack(spacing: 10) {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 22))
-                            Text("Add Trip")
-                                .font(.system(size: 18, weight: .bold))
+                        .padding(.horizontal, 24)
+                        .padding(.top, 8)
+                        .padding(.bottom, 20)
+                        
+                        // Weekday headers
+                        HStack(spacing: 0) {
+                            ForEach(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], id: \.self) { day in
+                                Text(day)
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.iceTextSecondary)
+                                    .frame(maxWidth: .infinity)
+                            }
                         }
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 18)
-                        .background(Color.iceAccent)
-                        .cornerRadius(16)
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 16)
+                        
+                        // Calendar grid
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 16) {
+                            ForEach(daysInMonth, id: \.self) { date in
+                                if let date = date {
+                                    DayCell(date: date, isSelected: isSelected(date), trips: dataManager.tripsForDate(date))
+                                        .onTapGesture {
+                                            withAnimation(.spring(response: 0.3)) {
+                                                selectedDate = date
+                                            }
+                                        }
+                                } else {
+                                    Color.clear
+                                        .frame(height: 60)
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 24)
+                        
+                        Spacer()
+                        
+                        // Add trip button
+                        Button(action: { showingAddTrip = true }) {
+                            HStack(spacing: 10) {
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.system(size: 22))
+                                Text("Add Trip")
+                                    .font(.system(size: 18, weight: .bold))
+                            }
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 18)
+                            .background(Color.iceAccent)
+                            .cornerRadius(16)
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 20)
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.bottom, 20)
                 }
             }
             .navigationTitle("Calendar")
